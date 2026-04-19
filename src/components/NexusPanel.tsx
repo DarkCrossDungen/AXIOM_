@@ -14,7 +14,7 @@ export const NexusPanel = () => {
   const handleAnalyze = async (url: string) => {
     setAnalyzing(true);
     try {
-      const resp = await fetch('http://localhost:8080/api/nexus/analyze-style', {
+      const resp = await fetch((import.meta.env.VITE_API_BASE_URL || '') + '/api/nexus/analyze-style', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ source: url, is_url: true })
       });
@@ -26,7 +26,7 @@ export const NexusPanel = () => {
 
   const fetchLeads = async () => {
     try {
-      const resp = await fetch('http://localhost:8080/api/reddit/leads');
+      const resp = await fetch((import.meta.env.VITE_API_BASE_URL || '') + '/api/reddit/leads');
       const data = await resp.json();
       setNexusState('leads', data.leads);
     } catch (e) { console.error(e); }
@@ -34,7 +34,7 @@ export const NexusPanel = () => {
 
   const loadSuggestions = async () => {
     try {
-      const resp = await fetch('http://localhost:8080/api/nexus/suggest', {
+      const resp = await fetch((import.meta.env.VITE_API_BASE_URL || '') + '/api/nexus/suggest', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ niche: 'AI Design Tools', style_context: userStyle || {} })
       });

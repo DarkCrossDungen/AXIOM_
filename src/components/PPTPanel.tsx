@@ -15,7 +15,7 @@ export const PPTPanel = ({ onClose }: { onClose: () => void }) => {
     if (!topic.trim()) return;
     setGenerating(true);
     try {
-      const resp = await fetch('http://localhost:8080/api/generate/ppt/outline', {
+      const resp = await fetch((import.meta.env.VITE_API_BASE_URL || '') + '/api/generate/ppt/outline', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic, slide_count: slideCount, style })
@@ -30,7 +30,7 @@ export const PPTPanel = ({ onClose }: { onClose: () => void }) => {
   const generateFull = async () => {
     setGenerating(true);
     try {
-      const resp = await fetch('http://localhost:8080/api/generate/ppt', {
+      const resp = await fetch((import.meta.env.VITE_API_BASE_URL || '') + '/api/generate/ppt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic, slide_count: slideCount, style })
@@ -110,7 +110,7 @@ export const PPTPanel = ({ onClose }: { onClose: () => void }) => {
             )}
 
             {downloadPath && (
-              <a href={`http://localhost:8080/${downloadPath}`} target="_blank" rel="noreferrer"
+              <a href={`${import.meta.env.VITE_API_BASE_URL || ''}/${downloadPath}`} target="_blank" rel="noreferrer"
                 style={{ display: 'block', textAlign: 'center', padding: '10px', background: colors.accentCyan, color: '#000', borderRadius: '8px', fontWeight: 700, fontSize: '0.75rem', textDecoration: 'none' }}>
                 ⬇ Download File
               </a>

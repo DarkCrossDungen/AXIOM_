@@ -10,3 +10,4 @@ Pillow
 trimesh
 numpy
 requests
+opencv-python-headless
