@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  axiom-studio:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - GEMINI_KEY_1=AIzaSyB23xJRh8rYuWblDQx5IdBEl-jiGULLCYg
+    volumes:
+      - ./outputs:/app/outputs
+    restart: always
