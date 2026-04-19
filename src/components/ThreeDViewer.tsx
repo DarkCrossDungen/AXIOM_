@@ -120,6 +120,44 @@ export const ThreeDViewer = ({ onClose }: { onClose: () => void }) => {
               {generating ? '⏳ Generating...' : '🎲 Generate 3D Model'}
             </button>
 
+            {/* MCP Auto-Pilot Section */}
+            <div style={{ marginTop: '10px', paddingTop: '16px', borderTop: `1px solid ${colors.border}` }}>
+              <label style={{ color: colors.accentCyan, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '6px' }}>Autopilot (Blender MCP)</label>
+              <button 
+                onClick={async () => {
+                  if (!prompt.trim()) return;
+                  setGenerating(true);
+                  try {
+                    const resp = await fetch((import.meta.env.VITE_API_BASE_URL || '') + '/api/mcp/blender/autonomous', {
+                      method: 'POST', headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ prompt })
+                    });
+                    const data = await resp.json();
+                    if (data.status === 'fallback' && data.colab_solution) {
+                      // Trigger download of ipynb 
+                      const a = document.createElement('a');
+                      a.href = data.colab_solution;
+                      a.download = `AXIOM_Auto_Cloud_Render_${Date.now()}.ipynb`;
+                      a.click();
+                      alert('Local Blender render failed. Auto-generated a Google Colab notebook for you. Please just upload it and press Run!');
+                    } else if (data.status === 'success') {
+                      alert('Render completed automatically via Blender MCP!');
+                    } else {
+                      alert('Error: ' + data.message);
+                    }
+                  } catch (e) {
+                     console.error(e);
+                  } finally {
+                     setGenerating(false);
+                  }
+                }} 
+                disabled={generating || !prompt.trim()}
+                style={{ width: '100%', padding: '11px', background: 'linear-gradient(45deg, #FF0080, #7928CA)', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 700, fontSize: '0.75rem', cursor: 'pointer', opacity: generating ? 0.5 : 1 }}
+              >
+                {generating ? '🤖 Scripting & Rendering...' : '🚀 1-Click Auto-Build & Render'}
+              </button>
+            </div>
+
             {colabUrl && (
               <a href={colabUrl} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', padding: '10px', background: '#F9AB00', color: '#000', borderRadius: '6px', fontWeight: 700, fontSize: '0.7rem', textDecoration: 'none' }}>
                 ☁️ Open Google Colab

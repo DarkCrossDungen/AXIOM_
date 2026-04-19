@@ -2,11 +2,12 @@
   "name": "axiom-frontend",
   "private": true,
   "version": "0.1.0",
-  "main": "electron-main.js",
+  "main": "electron-main.cjs",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "package": "electron-builder build --win"
   },
   "dependencies": {
     "@types/three": "^0.184.0",
@@ -21,7 +22,24 @@
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^41.2.1",
+    "electron-builder": "^26.8.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
+  },
+  "build": {
+    "appId": "com.axiom.studio",
+    "productName": "AXIOM Studio",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "files": [
+      "dist/**/*",
+      "electron-main.cjs",
+      "package.json"
+    ]
   }
 }

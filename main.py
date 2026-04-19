@@ -19,6 +19,7 @@ from agents.reddit_scout import get_reddit_scout
 # Import Generators
 from generators.ppt_generator import PPTGenerator
 from generators.model_3d_engine import Model3DEngine
+from generators.blender_mcp import BlenderMCPEngine
 
 # Load Environment Variables
 load_dotenv()
@@ -41,6 +42,7 @@ app.mount("/outputs", StaticFiles(directory="outputs"), name="outputs")
 # Initialize Generators
 ppt_gen = PPTGenerator()
 model_3d = Model3DEngine()
+blender_mcp = BlenderMCPEngine()
 
 # ==========================================
 # 🔥 FIREBASE INITIALIZATION
@@ -315,6 +317,13 @@ def animate_3d_model(req: AnimateRequest):
 def launch_blender(glb_path: str = None):
     result = model_3d.launch_blender(glb_path)
     return result
+
+class BlenderMCPRequest(BaseModel):
+    prompt: str
+
+@app.post("/api/mcp/blender/autonomous")
+def run_blender_mcp(req: BlenderMCPRequest):
+    return blender_mcp.execute_autonomous_task(req.prompt)
 
 # ==========================================
 # 🌌 AXIOM NEXUS: AGENT ENDPOINTS
